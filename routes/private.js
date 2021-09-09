@@ -1,6 +1,7 @@
 const express = require('express');
 const { getPrivateData } = require('../controllers/private'); //Aqui luego hay que cambiarlo por el home
 const notesController = require('../controllers/notes-controller');
+const bioprocessContoller = require('../controllers/bioprocesses-controller');
 
 const checkAuth = require('../middleware/auth');
 
@@ -16,9 +17,10 @@ router.get('/user/', notesController.getNotesByUserId);
 
 router.route("/notes").post(notesController.createNote);
 
-
 router.route("/notes/:nid").patch(notesController.updateNote);
   
 router.delete('/notes/:nid', notesController.deleteNote);
+
+router.route("/bioprocess").post(bioprocessContoller.createBioprocess);
 
 module.exports = router;
