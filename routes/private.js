@@ -24,6 +24,6 @@ router.delete('/notes/:nid', notesController.deleteNote);
 
 
 router.route("/bioprocess").post(bioprocessesController.createBioprocess);
-router.get('/notes/:bid', bioprocessesController.getBioprocessById);
+router.get('/bioprocess/:bid', bioprocessesController.getBioprocessById);
 
 module.exports = router;
