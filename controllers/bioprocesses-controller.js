@@ -12,7 +12,7 @@ const getBioprocessById = async (req, res, next) => {
   let bioprocess;
   console.log(bioprocessId);
   try {
-    bioprocess = await bioprocess.findById(bioprocessId);
+    bioprocess = await Bioprocess.findById(bioprocessId);
   } catch (err) {
     const error = new HttpError(
       'Something went wrong, could not find a bioprocess.',
