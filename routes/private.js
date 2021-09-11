@@ -15,7 +15,7 @@ router.get('/notes/:nid', notesController.getNoteById);
 
 router.get('/user/', notesController.getNotesByUserId);
 
-router.route("/notes").put(notesController.createNote);
+router.route("/notes").post(notesController.createNote);
 
 
 router.route("/notes/:nid").patch(notesController.updateNote);
@@ -23,7 +23,7 @@ router.route("/notes/:nid").patch(notesController.updateNote);
 router.delete('/notes/:nid', notesController.deleteNote);
 
 
-router.route("/bioprocess").put(bioprocessesController.createBioprocess);
+router.route("/bioprocess").post(bioprocessesController.createBioprocess);
 router.get('/bioprocess/:bid', bioprocessesController.getBioprocessById);
 
 module.exports = router;
