@@ -62,6 +62,8 @@ const getNotesByUserId = async (req, res, next) => {
 };
 
 
+
+
 // Create a Note
 const createNote = async (req, res, next) => {
 

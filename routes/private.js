@@ -2,7 +2,8 @@ const express = require('express');
 const { getPrivateData } = require('../controllers/private'); //Aqui luego hay que cambiarlo por el home
 const notesController = require('../controllers/notes-controller');
 const bioprocessesController = require('../controllers/bioprocesses-controller')
-
+const usersController = require('../controllers/users-controller')
+const {register } = require('../controllers/auth');
 const checkAuth = require('../middleware/auth');
 
 const router = express.Router();
@@ -24,6 +25,13 @@ router.delete('/notes/:nid', notesController.deleteNote);
 
 
 router.route("/bioprocess").post(bioprocessesController.createBioprocess);
+router.get('/bioprocess/', bioprocessesController.getBioprocesses);
 router.get('/bioprocess/:bid', bioprocessesController.getBioprocessById);
+router.get('/filteredbioprocess/:uid', bioprocessesController.getFilteredBioprocesses);
+
+router.get('/users/', usersController.getUsers);
+router.patch('/users/:uid', usersController.updateUser);
+
+router.route("/register").post(register);
 
 module.exports = router;
