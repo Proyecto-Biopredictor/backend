@@ -25,7 +25,7 @@ const getUsers = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
 
-    const { username, email, roles } = req.body;
+    const { username, email, type, roles } = req.body;
     const userId = req.params.uid;
   
     let user;
@@ -41,6 +41,7 @@ const updateUser = async (req, res, next) => {
   
     user.title = username;
     user.body = email;
+    user.type = type;
     user.roles = roles
   
     try {

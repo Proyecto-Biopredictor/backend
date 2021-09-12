@@ -10,7 +10,6 @@ const getBioprocessById = async (req, res, next) => {
   const bioprocessId = req.params.bid;
 
   let bioprocess;
-  console.log(bioprocessId);
   try {
     bioprocess = await Bioprocess.findById(bioprocessId);
   } catch (err) {
@@ -87,7 +86,6 @@ const getBioprocesses = async (req, res, next) => {
   let bioprocesses;
   try {
     bioprocesses = await Bioprocess.find().populate('bioprocesses');
-    console.log("AAAA", bioprocesses);
   } catch (err) {
     const error = new HttpError(
       'Fetching bioprocesses failed, please try again later.',
@@ -108,7 +106,6 @@ const getFilteredBioprocesses = async (req, res, next) => {
   let bioprocesses;
   try {
     bioprocesses = await Bioprocess.find().populate('bioprocesses');
-    console.log("AAAA", bioprocesses);
   } catch (err) {
     const error = new HttpError(
       'Fetching bioprocesses failed, please try again later.',
@@ -131,12 +128,15 @@ const getFilteredBioprocesses = async (req, res, next) => {
     bioIdArray.push(arrayitem.id);
   });
 
+  
   var roles = Object.values(user.roles);
   roles.forEach(function (arrayitem){
-    if(bioIdArray.includes(arrayitem.bioprocess)){
-      bioprocesses.splice(bioIdArray.indexOf(arrayitem.bioprocess),1);
+    if(bioIdArray.includes(arrayitem.bioprocessId)){ 
+      bioprocesses.splice(bioIdArray.indexOf(arrayitem.bioprocessId),1);
+      bioIdArray.splice(bioIdArray.indexOf(arrayitem.bioprocessId),1);
     }
   });
+  
     
 
   res.json({
