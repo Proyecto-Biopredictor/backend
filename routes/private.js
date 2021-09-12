@@ -5,6 +5,7 @@ const bioprocessesController = require('../controllers/bioprocesses-controller')
 const placesController = require('../controllers/places-controller');
 const usersController = require('../controllers/users-controller')
 const {register } = require('../controllers/auth');
+
 const checkAuth = require('../middleware/auth');
 
 const router = express.Router();
@@ -34,5 +35,10 @@ router.get('/users/', usersController.getUsers);
 router.patch('/users/:uid', usersController.updateUser);
 
 router.route("/register").post(register);
+
+
+router.route("/place").post(placesController.createPlace);
+router.get('/place/:bid', placesController.getPlaceById);
+
 
 module.exports = router;
