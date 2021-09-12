@@ -1,8 +1,10 @@
 const express = require('express');
 const { getPrivateData } = require('../controllers/private'); //Aqui luego hay que cambiarlo por el home
 const notesController = require('../controllers/notes-controller');
-const bioprocessesController = require('../controllers/bioprocesses-controller');
+const bioprocessesController = require('../controllers/bioprocesses-controller')
 const placesController = require('../controllers/places-controller');
+const usersController = require('../controllers/users-controller')
+const {register } = require('../controllers/auth');
 
 const checkAuth = require('../middleware/auth');
 
