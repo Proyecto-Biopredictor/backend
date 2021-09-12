@@ -4,14 +4,18 @@ const sendEmail = require("../utils/sendEmail");
 const crypto = require('crypto');
 
 exports.register = async (req, res, next) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, type, role } = req.body;
 
     try {
         const user = await User.create({
             username,
             email,
             password,
-            notes: []
+            type,
+            roles: [
+                role
+            ]
+            
         });
 
         sendToken(user, 201, res);

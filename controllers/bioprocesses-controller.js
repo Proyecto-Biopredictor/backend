@@ -10,7 +10,6 @@ const getBioprocessById = async (req, res, next) => {
   const bioprocessId = req.params.bid;
 
   let bioprocess;
-  console.log(bioprocessId);
   try {
     bioprocess = await Bioprocess.findById(bioprocessId);
   } catch (err) {
@@ -82,5 +81,72 @@ const createBioprocess = async (req, res, next) => {
   res.status(201).json({ bioprocess: createdBioprocess });
 };
 
+const getBioprocesses = async (req, res, next) => {
+  
+  let bioprocesses;
+  try {
+    bioprocesses = await Bioprocess.find().populate('bioprocesses');
+  } catch (err) {
+    const error = new HttpError(
+      'Fetching bioprocesses failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+
+  res.json({
+    bioprocesses: bioprocesses.map(user =>
+      user.toObject({ getters: true })
+    )
+  });
+};
+
+const getFilteredBioprocesses = async (req, res, next) => {
+  const userId = req.params.uid;
+  let bioprocesses;
+  try {
+    bioprocesses = await Bioprocess.find().populate('bioprocesses');
+  } catch (err) {
+    const error = new HttpError(
+      'Fetching bioprocesses failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+  let user;
+  try {
+    user = await User.findById(userId);
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not fetch user.',
+      500
+    );
+    return next(error);
+  }
+  var bioIdArray = [];
+  bioprocesses.forEach(function (arrayitem){
+    bioIdArray.push(arrayitem.id);
+  });
+
+  
+  var roles = Object.values(user.roles);
+  roles.forEach(function (arrayitem){
+    if(bioIdArray.includes(arrayitem.bioprocessId)){ 
+      bioprocesses.splice(bioIdArray.indexOf(arrayitem.bioprocessId),1);
+      bioIdArray.splice(bioIdArray.indexOf(arrayitem.bioprocessId),1);
+    }
+  });
+  
+    
+
+  res.json({
+    bioprocesses: bioprocesses.map(user =>
+      user.toObject({ getters: true })
+    )
+  });
+};
+
 exports.getBioprocessById = getBioprocessById;
 exports.createBioprocess = createBioprocess;
+exports.getBioprocesses = getBioprocesses;
+exports.getFilteredBioprocesses = getFilteredBioprocesses;
