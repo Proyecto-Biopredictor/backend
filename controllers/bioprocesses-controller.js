@@ -184,8 +184,46 @@ const deleteBioprocess = async (req, res, next) => {
   res.status(200).json({ message: 'Deleted bioprocess.' });
 }
 
+const updateBioprocess = async (req, res, next) => {
+
+  const { name, description, isTimeSeries, image, type, places, factors} = req.body;
+  const bioprocessId = req.params.bid;
+
+  let bioprocess;
+  try {
+    bioprocess = await Bioprocess.findById(bioprocessId);
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not update bioprocess.',
+      500
+    );
+    return next(error);
+  }
+
+  bioprocess.name = name;
+  bioprocess.description = description;
+  bioprocess.isTimeSeries = isTimeSeries;
+  bioprocess.image = image;
+  bioprocess.type = type;
+  bioprocess.places = places;
+  bioprocess.factors = factors;
+
+  try {
+    await bioprocess.save();
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not update bioprocess.',
+      500
+    );
+    return next(error);
+  }
+
+  res.status(200).json({ bioprocess: bioprocess.toObject({ getters: true }) });
+};
+
 exports.getBioprocessById = getBioprocessById;
 exports.createBioprocess = createBioprocess;
 exports.getBioprocesses = getBioprocesses;
 exports.getFilteredBioprocesses = getFilteredBioprocesses;
-exports.deleteBioprocess = deleteBioprocess
+exports.deleteBioprocess = deleteBioprocess;
+exports.updateBioprocess = updateBioprocess;
