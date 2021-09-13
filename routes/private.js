@@ -31,6 +31,7 @@ router.get('/bioprocess/', bioprocessesController.getBioprocesses);
 router.get('/bioprocess/:bid', bioprocessesController.getBioprocessById);
 router.get('/filteredbioprocess/:uid', bioprocessesController.getFilteredBioprocesses);
 router.delete('/bioprocess/:bid', bioprocessesController.deleteBioprocess);
+router.patch('/bioprocess/:bid', bioprocessesController.updateBioprocess);
 
 router.get('/users/', usersController.getUsers);
 router.patch('/users/:uid', usersController.updateUser);
