@@ -35,7 +35,7 @@ const getPlaceById = async (req, res, next) => {
 // Create a Place
 const createPlace = async (req, res, next) => {
 
-  const { name, description, isTimeSeries, image, type } = req.body;
+  const { name, description, isTlatitudeimeSeries, longitude, image } = req.body;
 
   const createdPlace = new Place({
     name,
