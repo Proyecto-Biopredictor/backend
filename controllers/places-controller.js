@@ -1,13 +1,14 @@
 const { validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 const Place = require('../models/Place');
+const Bioprocess = require('../models/Bioprocess');
 
 const HttpError = require('../models/http-error');
 const User = require('../models/User');
 
 //Get a Place by ID
 const getPlaceById = async (req, res, next) => {
-  const PlaceId = req.params.bid;
+  const PlaceId = req.params.pid;
 
   let Place;
   console.log(PlaceId);
@@ -35,14 +36,15 @@ const getPlaceById = async (req, res, next) => {
 // Create a Place
 const createPlace = async (req, res, next) => {
 
-  const { name, description, latitude, longitude, image } = req.body;
+  const { name, description, latitude, longitude, image, bioprocesses } = req.body;
 
   const createdPlace = new Place({
     name,
     description,
     latitude,
     longitude,
-    image
+    image,
+    bioprocesses
   });
 
    let user;
@@ -82,5 +84,155 @@ const createPlace = async (req, res, next) => {
   res.status(201).json({ Place: createdPlace });
 };
 
+const getPlaces = async (req, res, next) => {
+  
+  let places;
+  try {
+    places = await Place.find().populate('places');
+  } catch (err) {
+    const error = new HttpError(
+      'Fetching places failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+
+  res.json({
+    places: places.map(places =>
+      places.toObject({ getters: true })
+    )
+  });
+};
+
+const getFilteredPlaces = async (req, res, next) => {
+  const bioprocessId = req.params.bid;
+  let places;
+  try {
+    places = await Place.find().populate('places');
+  } catch (err) {
+    const error = new HttpError(
+      'Fetching places failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+  let bioprocess;
+  try {
+    bioprocess = await Bioprocess.findById(bioprocessId);
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not fetch bioprocess.',
+      500
+    );
+    return next(error);
+  }
+  var placeIdArray = [];
+  places.forEach(function (arrayitem){
+    placeIdArray.push(arrayitem.id);
+  });
+
+  
+  bioprocess.places.forEach(function (arrayitem){
+    if(placeIdArray.includes(arrayitem)){ 
+      console.log("lo encontró");
+      places.splice(placeIdArray.indexOf(arrayitem),1);
+      placeIdArray.splice(placeIdArray.indexOf(arrayitem),1);
+    }
+  });
+    
+
+  res.json({
+    places: places.map(place =>
+      place.toObject({ getters: true })
+    )
+  });
+};
+
+const getPlacesFromBio = async (req, res, next) => {
+  const bioprocessId = req.params.bid;
+  let places;
+  try {
+    places = await Place.find().populate('places');
+  } catch (err) {
+    const error = new HttpError(
+      'Fetching places failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+  let bioprocess;
+  try {
+    bioprocess = await Bioprocess.findById(bioprocessId);
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not fetch bioprocess.',
+      500
+    );
+    return next(error);
+  }
+  var placeIdArray = [];
+  places.forEach(function (arrayitem){
+    placeIdArray.push(arrayitem.id);
+  });
+
+  let placesFromBio = [];
+  
+  bioprocess.places.forEach(function (arrayitem){
+    if(placeIdArray.includes(arrayitem)){ 
+      console.log("lo encontró");
+      placesFromBio.push(places[placeIdArray.indexOf(arrayitem)]);
+    }
+  });
+    
+  console.log(placesFromBio);
+
+  res.json({
+    places: placesFromBio.map(place =>
+      place.toObject({ getters: true })
+    )
+  });
+};
+
+const updatePlace = async (req, res, next) => {
+
+  const { name, description, latitude, longitude, image, bioprocesses} = req.body;
+  const placeId = req.params.pid;
+
+  let place;
+  try {
+    place = await Place.findById(placeId);
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not update place.',
+      500
+    );
+    return next(error);
+  }
+
+  place.name = name;
+  place.description = description;
+  place.latitude = latitude;
+  place.longitude = longitude;
+  place.image = image;
+  place.bioprocesses = bioprocesses;
+
+  try {
+    await place.save();
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not update place.',
+      500
+    );
+    return next(error);
+  }
+
+  res.status(200).json({ place: place.toObject({ getters: true }) });
+};
+
+
 exports.getPlaceById = getPlaceById;
 exports.createPlace = createPlace;
+exports.getPlaces = getPlaces;
+exports.getFilteredPlaces = getFilteredPlaces;
+exports.getPlacesFromBio = getPlacesFromBio;
+exports.updatePlace = updatePlace;

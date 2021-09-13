@@ -40,7 +40,11 @@ router.route("/register").post(register);
 
 
 router.route("/place").post(placesController.createPlace);
-router.get('/place/:bid', placesController.getPlaceById);
+router.get('/place/:pid', placesController.getPlaceById);
+router.get('/place/', placesController.getPlaces);
+router.get('/filteredplace/:bid', placesController.getFilteredPlaces);
+router.get('/placebioprocess/:bid', placesController.getPlacesFromBio);
+router.patch('/place/:pid', placesController.updatePlace);
 
 
 module.exports = router;

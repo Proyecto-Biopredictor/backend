@@ -97,8 +97,8 @@ const getBioprocesses = async (req, res, next) => {
   }
 
   res.json({
-    bioprocesses: bioprocesses.map(user =>
-      user.toObject({ getters: true })
+    bioprocesses: bioprocesses.map(bioprocess =>
+      bioprocess.toObject({ getters: true })
     )
   });
 };
