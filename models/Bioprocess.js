@@ -8,6 +8,8 @@ const BioprocessSchema = new Schema({
   isTimeSeries: { type: Boolean, required: true },
   image: { type: String },
   type: { type: String, required: true },
+  places: [{ type: Object, ref: 'Place'}],
+  factors: [{ type: Object, ref: 'Factor'}]
   
 });
 

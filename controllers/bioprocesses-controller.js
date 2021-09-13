@@ -34,14 +34,16 @@ const getBioprocessById = async (req, res, next) => {
 // Create a bioprocess
 const createBioprocess = async (req, res, next) => {
 
-  const { name, description, isTimeSeries, image, type } = req.body;
+  const { name, description, isTimeSeries, image, type, places, factors} = req.body;
 
   const createdBioprocess = new Bioprocess({
     name,
     description,
     isTimeSeries,
     image,
-    type
+    type,
+    places,
+    factors
   });
 
    let user;
@@ -155,6 +157,13 @@ const deleteBioprocess = async (req, res, next) => {
   } catch (err) {
     const error = new HttpError(
       'Something went wrong, could not delete bioprocess.',
+      500
+    );
+    return next(error);
+  }
+  if (bioprocess.factors.length > 0){
+    const error = new HttpError(
+      'El bioproceso contiene datos. No se puede eliminar.',
       500
     );
     return next(error);
