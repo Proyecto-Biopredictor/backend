@@ -146,7 +146,37 @@ const getFilteredBioprocesses = async (req, res, next) => {
   });
 };
 
+const deleteBioprocess = async (req, res, next) => {
+  const bioprocessId = req.params.bid;
+
+  let bioprocess;
+  try {
+    bioprocess = await Bioprocess.findById(bioprocessId).populate('bioprocess');
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not delete bioprocess.',
+      500
+    );
+    return next(error);
+  }
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await bioprocess.remove({ session: sess });
+    await sess.commitTransaction();
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not delete bioprocess.',
+      500
+    );
+    return next(error);
+  }
+
+  res.status(200).json({ message: 'Deleted bioprocess.' });
+}
+
 exports.getBioprocessById = getBioprocessById;
 exports.createBioprocess = createBioprocess;
 exports.getBioprocesses = getBioprocesses;
 exports.getFilteredBioprocesses = getFilteredBioprocesses;
+exports.deleteBioprocess = deleteBioprocess
