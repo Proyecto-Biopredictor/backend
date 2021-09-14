@@ -130,14 +130,16 @@ const getFilteredBioprocesses = async (req, res, next) => {
     bioIdArray.push(arrayitem.id);
   });
 
-  
-  var roles = Object.values(user.roles);
-  roles.forEach(function (arrayitem){
-    if(bioIdArray.includes(arrayitem.bioprocessId)){ 
-      bioprocesses.splice(bioIdArray.indexOf(arrayitem.bioprocessId),1);
-      bioIdArray.splice(bioIdArray.indexOf(arrayitem.bioprocessId),1);
-    }
-  });
+  if(user && bioprocesses){
+    var roles = Object.values(user.roles);
+    roles.forEach(function (arrayitem){
+      if(bioIdArray.includes(arrayitem.bioprocessId)){ 
+        bioprocesses.splice(bioIdArray.indexOf(arrayitem.bioprocessId),1);
+        bioIdArray.splice(bioIdArray.indexOf(arrayitem.bioprocessId),1);
+      }
+    });
+  }
+
   
     
 
