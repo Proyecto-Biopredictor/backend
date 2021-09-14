@@ -131,15 +131,15 @@ const getFilteredPlaces = async (req, res, next) => {
     placeIdArray.push(arrayitem.id);
   });
 
-  
-  bioprocess.places.forEach(function (arrayitem){
-    if(placeIdArray.includes(arrayitem)){ 
-      console.log("lo encontró");
-      places.splice(placeIdArray.indexOf(arrayitem),1);
-      placeIdArray.splice(placeIdArray.indexOf(arrayitem),1);
-    }
-  });
-    
+  if(bioprocess && places){
+    bioprocess.places.forEach(function (arrayitem){
+      if(placeIdArray.includes(arrayitem)){ 
+        console.log("lo encontró");
+        places.splice(placeIdArray.indexOf(arrayitem),1);
+        placeIdArray.splice(placeIdArray.indexOf(arrayitem),1);
+      }
+    });
+  }
 
   res.json({
     places: places.map(place =>
@@ -150,7 +150,7 @@ const getFilteredPlaces = async (req, res, next) => {
 
 const getPlacesFromBio = async (req, res, next) => {
   const bioprocessId = req.params.bid;
-  let places;
+  let places = [];
   try {
     places = await Place.find().populate('places');
   } catch (err) {
@@ -160,7 +160,7 @@ const getPlacesFromBio = async (req, res, next) => {
     );
     return next(error);
   }
-  let bioprocess;
+  let bioprocess =[];
   try {
     bioprocess = await Bioprocess.findById(bioprocessId);
   } catch (err) {
@@ -175,14 +175,17 @@ const getPlacesFromBio = async (req, res, next) => {
     placeIdArray.push(arrayitem.id);
   });
 
+  console.log(bioprocess);
   let placesFromBio = [];
-  
-  bioprocess.places.forEach(function (arrayitem){
-    if(placeIdArray.includes(arrayitem)){ 
-      console.log("lo encontró");
-      placesFromBio.push(places[placeIdArray.indexOf(arrayitem)]);
-    }
-  });
+  if(bioprocess && places){
+    bioprocess.places.forEach(function (arrayitem){
+      if(placeIdArray.includes(arrayitem)){ 
+        console.log("lo encontró");
+        placesFromBio.push(places[placeIdArray.indexOf(arrayitem)]);
+      }
+    });
+  }
+
     
   console.log(placesFromBio);
 
