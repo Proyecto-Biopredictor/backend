@@ -4,6 +4,7 @@ const notesController = require('../controllers/notes-controller');
 const bioprocessesController = require('../controllers/bioprocesses-controller')
 const placesController = require('../controllers/places-controller');
 const usersController = require('../controllers/users-controller')
+const factorsController = require('../controllers/factors-controller')
 const {register } = require('../controllers/auth');
 
 const checkAuth = require('../middleware/auth');
@@ -46,5 +47,9 @@ router.get('/filteredplace/:bid', placesController.getFilteredPlaces);
 router.get('/placebioprocess/:bid', placesController.getPlacesFromBio);
 router.patch('/place/:pid', placesController.updatePlace);
 
+
+router.route("/bioprocess").post(bioprocessesController.createBioprocess);
+router.get('/bioprocess/', bioprocessesController.getBioprocesses);
+router.get('/bioprocess/:bid', bioprocessesController.getBioprocessById);
 
 module.exports = router;

@@ -82,5 +82,26 @@ const createFactor = async (req, res, next) => {
   res.status(201).json({ Factor: createdFactor });
 };
 
+const getFactors = async (req, res, next) => {
+  
+  let factors;
+  try {
+    factors = await Factor.find().populate('factors');
+  } catch (err) {
+    const error = new HttpError(
+      'Fetching factors failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+
+  res.json({
+    factors: factors.map(factor =>
+      factor.toObject({ getters: true })
+    )
+  });
+};
+
 exports.getFactorById = getFactorById;
 exports.createFactor = createFactor;
+exports.getFactors = getFactors;
