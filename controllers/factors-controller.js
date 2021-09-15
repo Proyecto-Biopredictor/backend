@@ -47,11 +47,11 @@ const createFactor = async (req, res, next) => {
 
    let bioprocess;
    try {
-     bioprocess = await Bioprocess.findById(req.bioprocessData.bioprocessID);
+     bioprocess = await Bioprocess.findById(req.body.bioprocessID);
     
    } catch (err) {
      const error = new HttpError(
-       'Creating Factor failed, please try again.',
+       'Could not fetch bioprocess, please try again.',
        500
      );
      return next(error);
