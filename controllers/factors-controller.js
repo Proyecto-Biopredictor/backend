@@ -191,17 +191,20 @@ const getFactorsFromBio = async (req, res, next) => {
   }
   var factorIdArray = [];
   factors.forEach(function (arrayitem){
-    factorIdArray.push(arrayitem.id);
+    console.log("HOLA");
+    console.log(arrayitem);
+    if(arrayitem.bioprocessID == bioprocessId){
+      factorIdArray.push(arrayitem.id);
+    }
+    
   });
-
-  console.log(bioprocess);
+  console.log("ESTON SSO");
+  console.log(factorIdArray);
+  console.log("SSSSSSSSS");
   let factorsFromBio = [];
   if(bioprocess && factors){
-    bioprocess.factors.forEach(function (arrayitem){
-      if(factorIdArray.includes(arrayitem)){ 
-        console.log("lo encontró");
-        factorsFromBio.push(factors[factorIdArray.indexOf(arrayitem)]);
-      }
+    factorIdArray.forEach(function (arrayitem){
+      factorsFromBio.push(factors[factorIdArray.indexOf(arrayitem.id)]);
     });
   }
 
