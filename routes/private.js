@@ -53,5 +53,6 @@ router.get('/factor/', factorsController.getFactors);
 router.get('/factor/:fid', factorsController.getFactorById);
 router.delete('/factor/:fid', factorsController.deleteFactor);
 router.patch('/factor/:fid', factorsController.updateFactor);
+router.get('/factorbioprocess/:bid', factorsController.getFactorsFromBio);
 
 module.exports = router;

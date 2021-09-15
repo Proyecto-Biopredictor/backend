@@ -167,8 +167,57 @@ const updateFactor = async (req, res, next) => {
   res.status(200).json({ factor: factor.toObject({ getters: true }) });
 };
 
+const getFactorsFromBio = async (req, res, next) => {
+  const bioprocessId = req.params.bid;
+  let factors = [];
+  try {
+    factors = await Factor.find().populate('factors');
+  } catch (err) {
+    const error = new HttpError(
+      'Fetching factors failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+  let bioprocess =[];
+  try {
+    bioprocess = await Bioprocess.findById(bioprocessId);
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not fetch bioprocess.',
+      500
+    );
+    return next(error);
+  }
+  var factorIdArray = [];
+  factors.forEach(function (arrayitem){
+    factorIdArray.push(arrayitem.id);
+  });
+
+  console.log(bioprocess);
+  let factorsFromBio = [];
+  if(bioprocess && factors){
+    bioprocess.factors.forEach(function (arrayitem){
+      if(factorIdArray.includes(arrayitem)){ 
+        console.log("lo encontró");
+        factorsFromBio.push(factors[factorIdArray.indexOf(arrayitem)]);
+      }
+    });
+  }
+
+
+  console.log(factorsFromBio);
+
+  res.json({
+    factors: factorsFromBio.map(factor =>
+      factor.toObject({ getters: true })
+    )
+  });
+};
+
 exports.getFactorById = getFactorById;
 exports.createFactor = createFactor;
 exports.getFactors = getFactors;
 exports.deleteFactor = deleteFactor;
 exports.updateFactor = updateFactor;
+exports.getFactorsFromBio = getFactorsFromBio;
