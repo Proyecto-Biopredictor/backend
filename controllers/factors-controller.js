@@ -7,7 +7,7 @@ const Bioprocess = require('../models/Bioprocess');
 
 //Get a Factor by ID
 const getFactorById = async (req, res, next) => {
-  const FactorId = req.params.bid;
+  const FactorId = req.params.fid;
 
   let Factor;
   console.log(FactorId);
@@ -102,6 +102,73 @@ const getFactors = async (req, res, next) => {
   });
 };
 
+
+const deleteFactor = async (req, res, next) => {
+  const factorId = req.params.fid;
+
+  let factor;
+  try {
+    factor = await Factor.findById(factorId).populate('factor');
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not delete factor.',
+      500
+    );
+    return next(error);
+  }
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await factor.remove({ session: sess });
+    await sess.commitTransaction();
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not delete factor.',
+      500
+    );
+    return next(error);
+  }
+
+  res.status(200).json({ message: 'Deleted factor.' });
+}
+
+const updateFactor = async (req, res, next) => {
+
+  const { name, description, isDependent, bioprocessID, type} = req.body;
+  const factorId = req.params.fid;
+
+  let factor;
+  try {
+    factor = await Factor.findById(factorId);
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not update factor.',
+      500
+    );
+    return next(error);
+  }
+
+  factor.name = name;
+  factor.description = description;
+  factor.isDependent = isDependent;
+  factor.bioprocessID = bioprocessID;
+  factor.type = type;
+
+  try {
+    await factor.save();
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not update factor.',
+      500
+    );
+    return next(error);
+  }
+
+  res.status(200).json({ factor: factor.toObject({ getters: true }) });
+};
+
 exports.getFactorById = getFactorById;
 exports.createFactor = createFactor;
 exports.getFactors = getFactors;
+exports.deleteFactor = deleteFactor;
+exports.updateFactor = updateFactor;

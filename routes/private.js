@@ -50,6 +50,8 @@ router.patch('/place/:pid', placesController.updatePlace);
 
 router.route("/factor").post(factorsController.createFactor);
 router.get('/factor/', factorsController.getFactors);
-router.get('/factor/:bid', factorsController.getFactorById);
+router.get('/factor/:fid', factorsController.getFactorById);
+router.delete('/factor/:fid', factorsController.deleteFactor);
+router.patch('/factor/:fid', factorsController.updateFactor);
 
 module.exports = router;
