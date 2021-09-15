@@ -48,8 +48,8 @@ router.get('/placebioprocess/:bid', placesController.getPlacesFromBio);
 router.patch('/place/:pid', placesController.updatePlace);
 
 
-router.route("/bioprocess").post(bioprocessesController.createBioprocess);
-router.get('/bioprocess/', bioprocessesController.getBioprocesses);
-router.get('/bioprocess/:bid', bioprocessesController.getBioprocessById);
+router.route("/factor").post(factorsController.createFactor);
+router.get('/factor/', factorsController.getFactors);
+router.get('/factor/:bid', factorsController.getFactorById);
 
 module.exports = router;
