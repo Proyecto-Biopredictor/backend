@@ -7,12 +7,12 @@ const Bioprocess = require('../models/Bioprocess');
 
 //Get a Factor by ID
 const getFactorById = async (req, res, next) => {
-  const FactorId = req.params.fid;
+  const factorId = req.params.fid;
 
-  let Factor;
-  console.log(FactorId);
+  let factor;
+  console.log(factorId);
   try {
-    Factor = await Factor.findById(FactorId);
+    factor = await Factor.findById(factorId);
   } catch (err) {
     const error = new HttpError(
       'Something went wrong, could not find a Factor.',
@@ -21,7 +21,7 @@ const getFactorById = async (req, res, next) => {
     return next(error);
   }
 
-  if (!Factor) {
+  if (!factor) {
     const error = new HttpError(
       'Could not find Factor for the provided id.',
       404
@@ -29,7 +29,7 @@ const getFactorById = async (req, res, next) => {
     return next(error);
   }
 
-  res.json({ Factor: Factor.toObject({ getters: true }) });
+  res.json({ factor: factor.toObject({ getters: true }) });
 };
 
 // Create a Factor
