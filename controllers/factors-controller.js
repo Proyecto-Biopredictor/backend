@@ -190,23 +190,15 @@ const getFactorsFromBio = async (req, res, next) => {
     return next(error);
   }
   var factorIdArray = [];
-  factors.forEach(function (arrayitem){
-    console.log("HOLA");
-    console.log(arrayitem);
+  let factorsFromBio = [];
+
+  factors.forEach(arrayitem => {
     if(arrayitem.bioprocessID == bioprocessId){
-      factorIdArray.push(arrayitem.id);
+      factorsFromBio.push(arrayitem);
     }
     
   });
-  console.log("ESTON SSO");
-  console.log(factorIdArray);
-  console.log("SSSSSSSSS");
-  let factorsFromBio = [];
-  if(bioprocess && factors){
-    factorIdArray.forEach(function (arrayitem){
-      factorsFromBio.push(factors[factorIdArray.indexOf(arrayitem.id)]);
-    });
-  }
+
 
 
   console.log(factorsFromBio);
