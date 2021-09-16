@@ -66,7 +66,7 @@ const createFactor = async (req, res, next) => {
     const sess = await mongoose.startSession();
     sess.startTransaction();
     await createdFactor.save({ session: sess });
-    // bioprocess.Factores.push(createdFactor);
+    bioprocess.factors.push(createdFactor._id);
     await bioprocess.save({ session: sess });
     await sess.commitTransaction();
 
