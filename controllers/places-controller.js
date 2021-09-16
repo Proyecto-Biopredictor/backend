@@ -8,12 +8,12 @@ const User = require('../models/User');
 
 //Get a Place by ID
 const getPlaceById = async (req, res, next) => {
-  const PlaceId = req.params.pid;
+  const placeId = req.params.pid;
 
-  let Place;
-  console.log(PlaceId);
+  let place;
+  console.log(placeId);
   try {
-    Place = await Place.findById(PlaceId);
+    place = await Place.findById(placeId);
   } catch (err) {
     const error = new HttpError(
       'Something went wrong, could not find a Place.',
@@ -22,7 +22,7 @@ const getPlaceById = async (req, res, next) => {
     return next(error);
   }
 
-  if (!Place) {
+  if (!place) {
     const error = new HttpError(
       'Could not find Place for the provided id.',
       404
@@ -30,7 +30,7 @@ const getPlaceById = async (req, res, next) => {
     return next(error);
   }
 
-  res.json({ Place: Place.toObject({ getters: true }) });
+  res.json({ place: place.toObject({ getters: true }) });
 };
 
 // Create a Place
