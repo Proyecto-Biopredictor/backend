@@ -88,7 +88,7 @@ const getPlaces = async (req, res, next) => {
   
   let places;
   try {
-    places = await Place.find();
+    places = await Place.find({}, {image: 0});
   } catch (err) {
     const error = new HttpError(
       'Fetching places failed, please try again later.',
