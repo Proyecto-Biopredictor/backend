@@ -86,7 +86,7 @@ const getFactors = async (req, res, next) => {
   
   let factors;
   try {
-    factors = await Factor.find().populate('factors');
+    factors = await Factor.find();
   } catch (err) {
     const error = new HttpError(
       'Fetching factors failed, please try again later.',
@@ -108,7 +108,7 @@ const deleteFactor = async (req, res, next) => {
 
   let factor;
   try {
-    factor = await Factor.findById(factorId).populate('factor');
+    factor = await Factor.findById(factorId);
   } catch (err) {
     const error = new HttpError(
       'Something went wrong, could not delete factor.',
@@ -171,7 +171,7 @@ const getFactorsFromBio = async (req, res, next) => {
   const bioprocessId = req.params.bid;
   let factors = [];
   try {
-    factors = await Factor.find().populate('factors');
+    factors = await Factor.find();
   } catch (err) {
     const error = new HttpError(
       'Fetching factors failed, please try again later.',

@@ -87,8 +87,10 @@ const getBioprocesses = async (req, res, next) => {
   
   let bioprocesses;
   try {
-    bioprocesses = await Bioprocess.find().populate('bioprocesses');
+    bioprocesses = await Bioprocess.find({}, {image: 0});
+    console.log(bioprocesses);
   } catch (err) {
+    console.log(err);
     const error = new HttpError(
       'Fetching bioprocesses failed, please try again later.',
       500
@@ -107,7 +109,7 @@ const getFilteredBioprocesses = async (req, res, next) => {
   const userId = req.params.uid;
   let bioprocesses;
   try {
-    bioprocesses = await Bioprocess.find().populate('bioprocesses');
+    bioprocesses = await Bioprocess.find();
   } catch (err) {
     const error = new HttpError(
       'Fetching bioprocesses failed, please try again later.',
@@ -155,7 +157,7 @@ const deleteBioprocess = async (req, res, next) => {
 
   let bioprocess;
   try {
-    bioprocess = await Bioprocess.findById(bioprocessId).populate('bioprocess');
+    bioprocess = await Bioprocess.findById(bioprocessId);
   } catch (err) {
     const error = new HttpError(
       'Something went wrong, could not delete bioprocess.',

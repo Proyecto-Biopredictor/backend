@@ -88,7 +88,7 @@ const getPlaces = async (req, res, next) => {
   
   let places;
   try {
-    places = await Place.find().populate('places');
+    places = await Place.find();
   } catch (err) {
     const error = new HttpError(
       'Fetching places failed, please try again later.',
@@ -108,7 +108,7 @@ const getFilteredPlaces = async (req, res, next) => {
   const bioprocessId = req.params.bid;
   let places;
   try {
-    places = await Place.find().populate('places');
+    places = await Place.find();
   } catch (err) {
     const error = new HttpError(
       'Fetching places failed, please try again later.',
@@ -152,7 +152,7 @@ const getPlacesFromBio = async (req, res, next) => {
   const bioprocessId = req.params.bid;
   let places = [];
   try {
-    places = await Place.find().populate('places');
+    places = await Place.find();
   } catch (err) {
     const error = new HttpError(
       'Fetching places failed, please try again later.',

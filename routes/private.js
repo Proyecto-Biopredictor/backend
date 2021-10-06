@@ -6,7 +6,9 @@ const placesController = require('../controllers/places-controller');
 const usersController = require('../controllers/users-controller');
 const factorsController = require('../controllers/factors-controller');
 const recordsController = require('../controllers/records-controller');
+const upload_fileController = require('../controllers/upload_file-controller');
 const {register } = require('../controllers/auth');
+const upload = require("../middleware/upload");
 
 const checkAuth = require('../middleware/auth');
 
@@ -58,5 +60,8 @@ router.get('/factorbioprocess/:bid', factorsController.getFactorsFromBio);
 
 router.route("/record").post(recordsController.createRecord);
 router.get('/record/:bid/:pid', recordsController.getRecordsFromBioXPlace);
+
+router.post("/upload_file", upload.single("file"), upload_fileController.saveImage);
+router.get('/fetchImage/:file(*)', upload_fileController.getImage);
 
 module.exports = router;

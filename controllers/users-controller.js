@@ -5,7 +5,7 @@ const getUsers = async (req, res, next) => {
   
     let users;
     try {
-      users = await User.find().populate('users');
+      users = await User.find();
       users = users.filter(user => user.type === 'user');
 
     } catch (err) {
