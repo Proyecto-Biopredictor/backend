@@ -232,6 +232,42 @@ const updatePlace = async (req, res, next) => {
   res.status(200).json({ place: place.toObject({ getters: true }) });
 };
 
+const deletePlace = async (req, res, next) => {
+  const placeId = req.params.pid;
+
+  let place;
+  try {
+    place = await Place.findById(placeId);
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not find place.',
+      500
+    );
+    return next(error);
+  }
+  console.log(place);
+  if (place.bioprocesses.length > 0){
+    const error = new HttpError(
+      'El lugar contiene bioprocesos. No se puede eliminar.',
+      500
+    );
+    return next(error);
+  }
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await place.remove({ session: sess });
+    await sess.commitTransaction();
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not delete place.',
+      500
+    );
+    return next(error);
+  }
+
+  res.status(200).json({ message: 'Deleted place.' });
+}
 
 exports.getPlaceById = getPlaceById;
 exports.createPlace = createPlace;
@@ -239,3 +275,4 @@ exports.getPlaces = getPlaces;
 exports.getFilteredPlaces = getFilteredPlaces;
 exports.getPlacesFromBio = getPlacesFromBio;
 exports.updatePlace = updatePlace;
+exports.deletePlace = deletePlace;

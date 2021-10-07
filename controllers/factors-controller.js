@@ -105,8 +105,10 @@ const getFactors = async (req, res, next) => {
 
 const deleteFactor = async (req, res, next) => {
   const factorId = req.params.fid;
+  const bioprocessId = req.params.bid;
 
   let factor;
+  let bioprocess;
   try {
     factor = await Factor.findById(factorId);
   } catch (err) {
@@ -116,10 +118,24 @@ const deleteFactor = async (req, res, next) => {
     );
     return next(error);
   }
+
+  try {
+    bioprocess = await Bioprocess.findById(bioprocessId);
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not find bioprocess.',
+      500
+    );
+    return next(error);
+  }
+
   try {
     const sess = await mongoose.startSession();
     sess.startTransaction();
+    const factorIndex = bioprocess.factors.indexOf(factorId);
+    bioprocess.factors.splice(factorIndex,1);
     await factor.remove({ session: sess });
+    await bioprocess.save();
     await sess.commitTransaction();
   } catch (err) {
     const error = new HttpError(

@@ -49,12 +49,13 @@ router.get('/place/', placesController.getPlaces);
 router.get('/filteredplace/:bid', placesController.getFilteredPlaces);
 router.get('/placebioprocess/:bid', placesController.getPlacesFromBio);
 router.patch('/place/:pid', placesController.updatePlace);
+router.delete('/place/:pid', placesController.deletePlace);
 
 
 router.route("/factor").post(factorsController.createFactor);
 router.get('/factor/', factorsController.getFactors);
 router.get('/factor/:fid', factorsController.getFactorById);
-router.delete('/factor/:fid', factorsController.deleteFactor);
+router.delete('/factor/:fid/:bid', factorsController.deleteFactor);
 router.patch('/factor/:fid', factorsController.updateFactor);
 router.get('/factorbioprocess/:bid', factorsController.getFactorsFromBio);
 

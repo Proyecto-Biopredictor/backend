@@ -160,7 +160,7 @@ const deleteBioprocess = async (req, res, next) => {
     bioprocess = await Bioprocess.findById(bioprocessId);
   } catch (err) {
     const error = new HttpError(
-      'Something went wrong, could not delete bioprocess.',
+      'Something went wrong, could not find bioprocess.',
       500
     );
     return next(error);
