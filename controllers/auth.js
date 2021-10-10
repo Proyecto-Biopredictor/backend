@@ -33,13 +33,13 @@ exports.login = async (req, res, next) => {
     try {
         const user = await User.findOne({ email }).select("+password");
         if (!user) {
-            return next(new ErrorResponse("User not found or invalid", 404));
+            return next(new ErrorResponse("Usuario o contraseña son incorrectas", 404));
         }
 
         const isMatch = await user.matchPasswords(password);
 
         if (!isMatch) {
-            return next(new ErrorResponse("Password not valid", 401));
+            return next(new ErrorResponse("Usuario o contraseña son incorrectas", 401));
         }
 
         sendToken(user, 200, res);
