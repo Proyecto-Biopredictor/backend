@@ -48,7 +48,7 @@ const createBioprocess = async (req, res, next) => {
 
    let user;
    try {
-     user = await User.findById(req.userData.userId);
+     user = await User.findById(req.userData.userId, {image: 0});
     
    } catch (err) {
      const error = new HttpError(
@@ -119,7 +119,7 @@ const getFilteredBioprocesses = async (req, res, next) => {
   }
   let user;
   try {
-    user = await User.findById(userId);
+    user = await User.findById(userId, {image: 0});
   } catch (err) {
     const error = new HttpError(
       'Something went wrong, could not fetch user.',

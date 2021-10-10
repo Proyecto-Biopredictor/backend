@@ -38,7 +38,9 @@ router.delete('/bioprocess/:bid', bioprocessesController.deleteBioprocess);
 router.patch('/bioprocess/:bid', bioprocessesController.updateBioprocess);
 
 router.get('/users/', usersController.getUsers);
+router.get('/allUsers/', usersController.getAllUsers);
 router.patch('/users/:uid', usersController.updateUser);
+router.delete('/users/:uid', usersController.deleteUser);
 
 router.route("/register").post(register);
 

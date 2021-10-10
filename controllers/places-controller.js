@@ -49,7 +49,7 @@ const createPlace = async (req, res, next) => {
 
    let user;
    try {
-     user = await User.findById(req.userData.userId);
+     user = await User.findById(req.userData.userId, {image: 0});
     
    } catch (err) {
      const error = new HttpError(
