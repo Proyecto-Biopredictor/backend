@@ -80,7 +80,7 @@ const createPlace = async (req, res, next) => {
     console.log(err);
     return next(error);
   }
-
+  createdPlace.image = "";
   res.status(201).json({ Place: createdPlace });
 };
 
@@ -108,7 +108,7 @@ const getFilteredPlaces = async (req, res, next) => {
   const bioprocessId = req.params.bid;
   let places;
   try {
-    places = await Place.find();
+    places = await Place.find({}, {image: 0});
   } catch (err) {
     const error = new HttpError(
       'Fetching places failed, please try again later.',
@@ -118,7 +118,7 @@ const getFilteredPlaces = async (req, res, next) => {
   }
   let bioprocess;
   try {
-    bioprocess = await Bioprocess.findById(bioprocessId);
+    bioprocess = await Bioprocess.findById(bioprocessId, {image: 0});
   } catch (err) {
     const error = new HttpError(
       'Something went wrong, could not fetch bioprocess.',
@@ -152,7 +152,7 @@ const getPlacesFromBio = async (req, res, next) => {
   const bioprocessId = req.params.bid;
   let places = [];
   try {
-    places = await Place.find();
+    places = await Place.find({}, {image: 0});
   } catch (err) {
     const error = new HttpError(
       'Fetching places failed, please try again later.',
@@ -162,7 +162,7 @@ const getPlacesFromBio = async (req, res, next) => {
   }
   let bioprocess =[];
   try {
-    bioprocess = await Bioprocess.findById(bioprocessId);
+    bioprocess = await Bioprocess.findById(bioprocessId, {image: 0});
   } catch (err) {
     const error = new HttpError(
       'Something went wrong, could not fetch bioprocess.',
@@ -203,7 +203,7 @@ const updatePlace = async (req, res, next) => {
 
   let place;
   try {
-    place = await Place.findById(placeId);
+    place = await Place.findById(placeId, {image: 0});
   } catch (err) {
     const error = new HttpError(
       'Something went wrong, could not update place.',
@@ -228,7 +228,7 @@ const updatePlace = async (req, res, next) => {
     );
     return next(error);
   }
-
+  place.image = "";
   res.status(200).json({ place: place.toObject({ getters: true }) });
 };
 
@@ -237,7 +237,7 @@ const deletePlace = async (req, res, next) => {
 
   let place;
   try {
-    place = await Place.findById(placeId);
+    place = await Place.findById(placeId, {image: 0});
   } catch (err) {
     const error = new HttpError(
       'Something went wrong, could not find place.',

@@ -79,7 +79,7 @@ const createBioprocess = async (req, res, next) => {
     console.log(err);
     return next(error);
   }
-
+  createdBioprocess.image = "";
   res.status(201).json({ bioprocess: createdBioprocess });
 };
 
@@ -109,7 +109,7 @@ const getFilteredBioprocesses = async (req, res, next) => {
   const userId = req.params.uid;
   let bioprocesses;
   try {
-    bioprocesses = await Bioprocess.find();
+    bioprocesses = await Bioprocess.find({}, {image: 0});
   } catch (err) {
     const error = new HttpError(
       'Fetching bioprocesses failed, please try again later.',
@@ -131,8 +131,9 @@ const getFilteredBioprocesses = async (req, res, next) => {
   bioprocesses.forEach(function (arrayitem){
     bioIdArray.push(arrayitem.id);
   });
-
-  if(user && bioprocesses){
+  
+  console.log(user);
+  if(user && bioprocesses && user.roles.length > 0){
     var roles = Object.values(user.roles);
     roles.forEach(function (arrayitem){
       if(bioIdArray.includes(arrayitem.bioprocessId)){ 
@@ -157,7 +158,7 @@ const deleteBioprocess = async (req, res, next) => {
 
   let bioprocess;
   try {
-    bioprocess = await Bioprocess.findById(bioprocessId);
+    bioprocess = await Bioprocess.findById(bioprocessId, {image: 0});
   } catch (err) {
     const error = new HttpError(
       'Something went wrong, could not find bioprocess.',
@@ -195,7 +196,7 @@ const updateBioprocess = async (req, res, next) => {
 
   let bioprocess;
   try {
-    bioprocess = await Bioprocess.findById(bioprocessId);
+    bioprocess = await Bioprocess.findById(bioprocessId, {image: 0});
   } catch (err) {
     const error = new HttpError(
       'Something went wrong, could not update bioprocess.',
@@ -221,7 +222,7 @@ const updateBioprocess = async (req, res, next) => {
     );
     return next(error);
   }
-
+  bioprocess.image = "";
   res.status(200).json({ bioprocess: bioprocess.toObject({ getters: true }) });
 };
 

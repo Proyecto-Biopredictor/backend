@@ -47,7 +47,7 @@ const createFactor = async (req, res, next) => {
 
    let bioprocess;
    try {
-     bioprocess = await Bioprocess.findById(req.body.bioprocessID);
+     bioprocess = await Bioprocess.findById(req.body.bioprocessID, {image: 0});
     
    } catch (err) {
      const error = new HttpError(
@@ -120,7 +120,7 @@ const deleteFactor = async (req, res, next) => {
   }
 
   try {
-    bioprocess = await Bioprocess.findById(bioprocessId);
+    bioprocess = await Bioprocess.findById(bioprocessId, {image: 0});
   } catch (err) {
     const error = new HttpError(
       'Something went wrong, could not find bioprocess.',
@@ -197,7 +197,7 @@ const getFactorsFromBio = async (req, res, next) => {
   }
   let bioprocess =[];
   try {
-    bioprocess = await Bioprocess.findById(bioprocessId);
+    bioprocess = await Bioprocess.findById(bioprocessId, {image: 0});
   } catch (err) {
     const error = new HttpError(
       'Something went wrong, could not fetch bioprocess.',

@@ -35,7 +35,7 @@ const createRecord = async (req, res, next) => {
 
     let bioprocess;
     try {
-        bioprocess = await Bioprocess.findById(bioprocessID);
+        bioprocess = await Bioprocess.findById(bioprocessID, {image: 0});
     } catch (err) {
         const error = new HttpError(
             "Could not fetch bioprocess, please try again.",
@@ -54,7 +54,7 @@ const createRecord = async (req, res, next) => {
 
     let place;
     try {
-        place = await Place.findById(placeID);
+        place = await Place.findById(placeID, {image: 0});
     } catch (err) {
         const error = new HttpError(
             "Could not fetch place, please try again.",
@@ -93,7 +93,7 @@ const getRecordsFromBioXPlace = async (req, res, next) => {
 
 
     try {
-        await Bioprocess.findById(bioprocessId);
+        await Bioprocess.findById(bioprocessId, {image: 0});
     } catch (err) {
         const error = new HttpError(
             'Something went wrong, could not fetch bioprocess.',
@@ -103,7 +103,7 @@ const getRecordsFromBioXPlace = async (req, res, next) => {
     }
 
     try {
-        await Place.findById(placeId);
+        await Place.findById(placeId, {image: 0});
     } catch (err) {
         const error = new HttpError(
             'Something went wrong, could not fetch places.',

@@ -13,7 +13,6 @@ exports.register = async (req, res, next) => {
             password,
             type,
             roles: [
-                role
             ]
             
         });
