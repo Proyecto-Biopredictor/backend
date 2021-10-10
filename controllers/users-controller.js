@@ -1,5 +1,6 @@
 const HttpError = require('../models/http-error');
 const User = require('../models/User');
+const mongoose = require('mongoose');
 
 const getUsers = async (req, res, next) => {
   
@@ -101,6 +102,7 @@ const deleteUser = async (req, res, next) => {
   try {
     const sess = await mongoose.startSession();
     sess.startTransaction();
+    
     await user.remove({ session: sess });
     await sess.commitTransaction();
   } catch (err) {
