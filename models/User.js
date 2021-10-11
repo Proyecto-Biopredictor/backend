@@ -26,6 +26,7 @@ const UserSchema = new mongoose.Schema({
     phone: {type: String},
     name: {type: String},
     lastname: {type: String},
+    details: {type: String},
     resetPasswordToken: String,
     resetPasswordExpire: Date,
 });
