@@ -27,6 +27,7 @@ const UserSchema = new mongoose.Schema({
     name: {type: String},
     lastname: {type: String},
     details: {type: String},
+    image: {type: String},
     resetPasswordToken: String,
     resetPasswordExpire: Date,
 });
