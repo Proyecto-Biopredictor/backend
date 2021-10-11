@@ -13,7 +13,10 @@ exports.register = async (req, res, next) => {
             password,
             type,
             roles: [
-            ]
+            ],
+            name: "",
+            lastname: "",
+            phone: ""
             
         });
 

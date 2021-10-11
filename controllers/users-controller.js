@@ -2,6 +2,31 @@ const HttpError = require('../models/http-error');
 const User = require('../models/User');
 const mongoose = require('mongoose');
 
+const getUserById = async (req, res, next) => {
+  const userId = req.params.uid;
+
+  let user;
+  try {
+    user = await User.findById(userId);
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not find a user.',
+      500
+    );
+    return next(error);
+  }
+
+  if (!user) {
+    const error = new HttpError(
+      'Could not find user for the provided id.',
+      404
+    );
+    return next(error);
+  }
+
+  res.json({ user: user.toObject({ getters: true }) });
+};
+
 const getUsers = async (req, res, next) => {
   
     let users;
@@ -47,7 +72,7 @@ const getAllUsers = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
 
-    const { username, email, type, roles } = req.body;
+    const { username, email, type, roles, phone, name, lastname } = req.body;
     const userId = req.params.uid;
   
     let user;
@@ -61,10 +86,13 @@ const updateUser = async (req, res, next) => {
       return next(error);
     }
   
-    user.title = username;
-    user.body = email;
+    user.username = username;
+    user.email = email;
     user.type = type;
-    user.roles = roles
+    user.roles = roles;
+    user.phone = phone;
+    user.name = name;
+    user.lastname = lastname;
   
     try {
       await user.save();
@@ -121,3 +149,4 @@ exports.getUsers = getUsers;
 exports.getAllUsers = getAllUsers;
 exports.updateUser = updateUser;
 exports.deleteUser = deleteUser;
+exports.getUserById = getUserById;

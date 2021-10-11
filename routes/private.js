@@ -41,6 +41,7 @@ router.get('/users/', usersController.getUsers);
 router.get('/allUsers/', usersController.getAllUsers);
 router.patch('/users/:uid', usersController.updateUser);
 router.delete('/users/:uid', usersController.deleteUser);
+router.get('/users/:uid', usersController.getUserById);
 
 router.route("/register").post(register);
 
