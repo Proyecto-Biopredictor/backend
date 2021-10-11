@@ -72,7 +72,7 @@ const getAllUsers = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
 
-    const { username, email, type, roles, phone, name, lastname, image } = req.body;
+    const { username, email, type, roles, phone, name, lastname, image, details } = req.body;
     const userId = req.params.uid;
   
     let user;
@@ -94,6 +94,7 @@ const updateUser = async (req, res, next) => {
     user.name = name;
     user.lastname = lastname;
     user.image = image;
+    user.details = details;
   
     try {
       await user.save();
