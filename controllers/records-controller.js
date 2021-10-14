@@ -132,7 +132,37 @@ const getRecordsFromBioXPlace = async (req, res, next) => {
     });
 };
 
+const deleteRecord = async (req, res, next) => {
+    const recordId = req.params.rid;
+  
+    let record;
+    try {
+        record = await Record.findById(recordId);
+    } catch (err) {
+      const error = new HttpError(
+        'Something went wrong, could not find place.',
+        500
+      );
+      return next(error);
+    }
+    console.log(record);
 
+    try {
+      const sess = await mongoose.startSession();
+      sess.startTransaction();
+      await record.remove({ session: sess });
+      await sess.commitTransaction();
+    } catch (err) {
+      const error = new HttpError(
+        'Something went wrong, could not delete record.',
+        500
+      );
+      return next(error);
+    }
+  
+    res.status(200).json({ message: 'Deleted record.' });
+  }
 
 exports.createRecord = createRecord;
 exports.getRecordsFromBioXPlace = getRecordsFromBioXPlace;
+exports.deleteRecord = deleteRecord;
