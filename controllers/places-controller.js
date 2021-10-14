@@ -33,6 +33,32 @@ const getPlaceById = async (req, res, next) => {
   res.json({ place: place.toObject({ getters: true }) });
 };
 
+const getPlacePicture = async (req, res, next) => {
+  const placeId = req.params.pid;
+
+  let place;
+  console.log(placeId);
+  try {
+    place = await Place.findById(placeId, {image: 1, _id: 0});
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not find a Place.',
+      500
+    );
+    return next(error);
+  }
+
+  if (!place) {
+    const error = new HttpError(
+      'Could not find Place for the provided id.',
+      404
+    );
+    return next(error);
+  }
+
+  res.json({ place: place.toObject({ getters: true }) });
+};
+
 // Create a Place
 const createPlace = async (req, res, next) => {
 
@@ -276,3 +302,4 @@ exports.getFilteredPlaces = getFilteredPlaces;
 exports.getPlacesFromBio = getPlacesFromBio;
 exports.updatePlace = updatePlace;
 exports.deletePlace = deletePlace;
+exports.getPlacePicture = getPlacePicture;

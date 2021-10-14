@@ -1,6 +1,7 @@
 const HttpError = require('../models/http-error');
 const User = require('../models/User');
 const mongoose = require('mongoose');
+const ObjectId = require('mongodb').ObjectId;
 
 const getUserById = async (req, res, next) => {
   const userId = req.params.uid;
@@ -50,11 +51,13 @@ const getUsers = async (req, res, next) => {
 };
 
 const getAllUsers = async (req, res, next) => {
-  
+  const userId = req.params.uid;
   let users;
   try {
     users = await User.find({}, {image: 0});
-
+    users = users.filter(user => user.id !== userId);
+    console.log(users);
+    console.log(userId);
   } catch (err) {
     const error = new HttpError(
       'Fetching users failed, please try again later.',

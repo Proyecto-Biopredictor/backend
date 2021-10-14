@@ -38,7 +38,7 @@ router.delete('/bioprocess/:bid', bioprocessesController.deleteBioprocess);
 router.patch('/bioprocess/:bid', bioprocessesController.updateBioprocess);
 
 router.get('/users/', usersController.getUsers);
-router.get('/allUsers/', usersController.getAllUsers);
+router.get('/allUsers/:uid', usersController.getAllUsers);
 router.patch('/users/:uid', usersController.updateUser);
 router.delete('/users/:uid', usersController.deleteUser);
 router.get('/users/:uid', usersController.getUserById);
@@ -53,6 +53,7 @@ router.get('/filteredplace/:bid', placesController.getFilteredPlaces);
 router.get('/placebioprocess/:bid', placesController.getPlacesFromBio);
 router.patch('/place/:pid', placesController.updatePlace);
 router.delete('/place/:pid', placesController.deletePlace);
+router.get('/placePicture/:pid', placesController.getPlacePicture);
 
 
 router.route("/factor").post(factorsController.createFactor);
