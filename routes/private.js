@@ -66,6 +66,7 @@ router.get('/factorbioprocess/:bid', factorsController.getFactorsFromBio);
 router.route("/record").post(recordsController.createRecord);
 router.get('/record/:bid/:pid', recordsController.getRecordsFromBioXPlace);
 router.delete('/record/:rid', recordsController.deleteRecord);
+router.patch('/record/:rid', recordsController.updateRecord);
 
 router.post("/upload_file", upload.single("file"), upload_fileController.saveImage);
 router.get('/fetchImage/:file(*)', upload_fileController.getImage);
