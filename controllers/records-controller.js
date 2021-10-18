@@ -165,7 +165,7 @@ const deleteRecord = async (req, res, next) => {
 
 const updateRecord = async (req, res, next) => {
 
-    const values = req.body;
+    const {timestamp, values} = req.body;
     const recordId = req.params.rid;
 
     let record;
@@ -179,6 +179,7 @@ const updateRecord = async (req, res, next) => {
         return next(error);
     }
 
+    record.timestamp = timestamp;
     record.values = values;
 
     try {
