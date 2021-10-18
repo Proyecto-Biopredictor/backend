@@ -35,7 +35,7 @@ const createRecord = async (req, res, next) => {
 
     let bioprocess;
     try {
-        bioprocess = await Bioprocess.findById(bioprocessID, {image: 0});
+        bioprocess = await Bioprocess.findById(bioprocessID, { image: 0 });
     } catch (err) {
         const error = new HttpError(
             "Could not fetch bioprocess, please try again.",
@@ -54,7 +54,7 @@ const createRecord = async (req, res, next) => {
 
     let place;
     try {
-        place = await Place.findById(placeID, {image: 0});
+        place = await Place.findById(placeID, { image: 0 });
     } catch (err) {
         const error = new HttpError(
             "Could not fetch place, please try again.",
@@ -93,7 +93,7 @@ const getRecordsFromBioXPlace = async (req, res, next) => {
 
 
     try {
-        await Bioprocess.findById(bioprocessId, {image: 0});
+        await Bioprocess.findById(bioprocessId, { image: 0 });
     } catch (err) {
         const error = new HttpError(
             'Something went wrong, could not fetch bioprocess.',
@@ -103,7 +103,7 @@ const getRecordsFromBioXPlace = async (req, res, next) => {
     }
 
     try {
-        await Place.findById(placeId, {image: 0});
+        await Place.findById(placeId, { image: 0 });
     } catch (err) {
         const error = new HttpError(
             'Something went wrong, could not fetch places.',
@@ -114,8 +114,8 @@ const getRecordsFromBioXPlace = async (req, res, next) => {
 
     try {
         records = await Record.find({
-            bioprocessID : new ObjectId(bioprocessId),
-            placeID : new ObjectId(placeId)
+            bioprocessID: new ObjectId(bioprocessId),
+            placeID: new ObjectId(placeId)
         });
     } catch (err) {
         const error = new HttpError(
@@ -134,35 +134,67 @@ const getRecordsFromBioXPlace = async (req, res, next) => {
 
 const deleteRecord = async (req, res, next) => {
     const recordId = req.params.rid;
-  
+
     let record;
     try {
         record = await Record.findById(recordId);
     } catch (err) {
-      const error = new HttpError(
-        'Something went wrong, could not find place.',
-        500
-      );
-      return next(error);
+        const error = new HttpError(
+            'Something went wrong, could not find place.',
+            500
+        );
+        return next(error);
     }
     console.log(record);
 
     try {
-      const sess = await mongoose.startSession();
-      sess.startTransaction();
-      await record.remove({ session: sess });
-      await sess.commitTransaction();
+        const sess = await mongoose.startSession();
+        sess.startTransaction();
+        await record.remove({ session: sess });
+        await sess.commitTransaction();
     } catch (err) {
-      const error = new HttpError(
-        'Something went wrong, could not delete record.',
-        500
-      );
-      return next(error);
+        const error = new HttpError(
+            'Something went wrong, could not delete record.',
+            500
+        );
+        return next(error);
     }
-  
+
     res.status(200).json({ message: 'Deleted record.' });
-  }
+}
+
+const updateRecord = async (req, res, next) => {
+
+    const values = req.body;
+    const recordId = req.params.rid;
+
+    let record;
+    try {
+        record = await Record.findById(recordId);
+    } catch (err) {
+        const error = new HttpError(
+            'Something went wrong, could not update record.',
+            500
+        );
+        return next(error);
+    }
+
+    record.values = values;
+
+    try {
+        await record.save();
+    } catch (err) {
+        const error = new HttpError(
+            'Something went wrong, could not update record.',
+            500
+        );
+        return next(error);
+    }
+
+    res.status(200).json({ record: record.toObject({ getters: true }) });
+};
 
 exports.createRecord = createRecord;
 exports.getRecordsFromBioXPlace = getRecordsFromBioXPlace;
 exports.deleteRecord = deleteRecord;
+exports.updateRecord = updateRecord;
