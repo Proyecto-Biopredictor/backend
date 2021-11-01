@@ -65,6 +65,7 @@ router.get('/factorbioprocess/:bid', factorsController.getFactorsFromBio);
 
 router.route("/record").post(recordsController.createRecord);
 router.get('/record/:bid/:pid', recordsController.getRecordsFromBioXPlace);
+router.get('/record/num/:bid/:pid', recordsController.getNumRecordsFromBioXPlace);
 router.delete('/record/:rid', recordsController.deleteRecord);
 router.patch('/record/:rid', recordsController.updateRecord);
 

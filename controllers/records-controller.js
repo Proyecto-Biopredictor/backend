@@ -195,7 +195,87 @@ const updateRecord = async (req, res, next) => {
     res.status(200).json({ record: record.toObject({ getters: true }) });
 };
 
+const getNumRecordsFromBioXPlace = async (req, res, next) => {
+    const bioprocessId = req.params.bid;
+    const placeId = req.params.pid;
+
+
+    try {
+        await Bioprocess.findById(bioprocessId, { image: 0 });
+    } catch (err) {
+        const error = new HttpError(
+            'Something went wrong, could not fetch bioprocess.',
+            500
+        );
+        return next(error);
+    }
+
+    try {
+        await Place.findById(placeId, { image: 0 });
+    } catch (err) {
+        const error = new HttpError(
+            'Something went wrong, could not fetch places.',
+            500
+        );
+        return next(error);
+    }
+
+    let factors;
+    try {
+        factors = await Factor.find({
+            "bioprocessID": new ObjectId(bioprocessId),
+            "type": "value"
+        }, "name"); //"name" or {"name": 1}
+    } catch (err) {
+        const error = new HttpError(
+            'Something went wrong, could not fetch bioprocess.',
+            500
+        );
+        return next(error);
+    }
+
+    let records;
+    try {
+        records = await Record.find({
+            bioprocessID: new ObjectId(bioprocessId),
+            placeID: new ObjectId(placeId)
+        });
+    } catch (err) {
+        const error = new HttpError(
+            'Fetching records failed, please try again later.',
+            500
+        );
+        return next(error);
+    }
+
+    let data = {};
+    const forEachLoop1 = async _ => {
+        for (let index = 0; index < factors.length; index++) {
+            data[factors[index].name] = [];
+        }
+    };
+
+    await forEachLoop1();
+
+    const forEachLoop2 = async _ => {
+        for (let index = 0; index < records.length; index++) {
+            for (let index2 = 0; index2 < factors.length; index2++) {
+                let factor = factors[index2].name;
+                let value = records[index].values[0][factor];
+                if(value !== ""){
+                    data[factor].push(value);
+                }
+            }
+        }
+    };
+
+    await forEachLoop2();
+
+    res.json(data);
+};
+
 exports.createRecord = createRecord;
 exports.getRecordsFromBioXPlace = getRecordsFromBioXPlace;
 exports.deleteRecord = deleteRecord;
 exports.updateRecord = updateRecord;
+exports.getNumRecordsFromBioXPlace = getNumRecordsFromBioXPlace;
