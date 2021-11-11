@@ -42,6 +42,8 @@ router.get('/allUsers/:uid', usersController.getAllUsers);
 router.patch('/users/:uid', usersController.updateUser);
 router.delete('/users/:uid', usersController.deleteUser);
 router.get('/users/:uid', usersController.getUserById);
+router.post('/userRole/:uid', usersController.updateRole);
+router.get('/permissions/:uid/:bid', usersController.getPermissionsFromBio);
 
 router.route("/register").post(register);
 

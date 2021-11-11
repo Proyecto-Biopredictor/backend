@@ -56,8 +56,6 @@ const getAllUsers = async (req, res, next) => {
   try {
     users = await User.find({}, {image: 0});
     users = users.filter(user => user.id !== userId);
-    console.log(users);
-    console.log(userId);
   } catch (err) {
     const error = new HttpError(
       'Fetching users failed, please try again later.',
@@ -149,9 +147,74 @@ const deleteUser = async (req, res, next) => {
   res.status(200).json({ message: 'Deleted user.' });
 }
 
+const updateRole = async (req, res, next) => {
+
+  const { roles } = req.body;
+  const userId = req.params.uid;
+
+  let user;
+  try {
+    user = await User.findById(userId, {image: 0});
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not update user.',
+      500
+    );
+    return next(error);
+  }
+  user.roles = roles;
+  try {
+    await user.save();
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not update user.',
+      500
+    );
+    return next(error);
+  }
+  user.image="";
+  res.status(200).json({ user: user.toObject({ getters: true }) });
+};
+
+const getPermissionsFromBio = async (req, res, next) => {
+
+  const bioprocessId = req.params.bid; 
+  const userId = req.params.uid;
+
+  let user;
+  try {
+    user = await User.findById(userId, {image: 0});
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not update user.',
+      500
+    );
+    return next(error);
+  }
+  const roles = user.roles;
+  let permissions = {
+    editFactor: true,
+    editData: true,
+    export: true
+  };
+  console.log(roles, "ROLES");
+  for (const role in roles) {
+    console.log(roles[role], "bid");
+    if(roles[role].bioprocessId === bioprocessId){
+      permissions = roles[role];
+      break;
+    }
+
+  }
+  res.status(200).json({ role: permissions });
+
+};
+
 
 exports.getUsers = getUsers;
 exports.getAllUsers = getAllUsers;
 exports.updateUser = updateUser;
 exports.deleteUser = deleteUser;
 exports.getUserById = getUserById;
+exports.updateRole = updateRole;
+exports.getPermissionsFromBio = getPermissionsFromBio;
