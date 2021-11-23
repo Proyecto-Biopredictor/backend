@@ -21,7 +21,7 @@ const createPrediction = async (req, res, next) => {
 
     let bioprocess;
     try {
-        bioprocess = await Bioprocess.findById(bioprocessID, {image: 0});
+        bioprocess = await Bioprocess.findById(bioprocessID);
     } catch (err) {
         const error = new HttpError(
             "Could not fetch bioprocess, please try again.",
@@ -40,7 +40,7 @@ const createPrediction = async (req, res, next) => {
 
     let place;
     try {
-        place = await Place.findById(placeID, {image: 0});
+        place = await Place.findById(placeID);
     } catch (err) {
         const error = new HttpError(
             "Could not fetch place, please try again.",
