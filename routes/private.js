@@ -7,6 +7,7 @@ const usersController = require('../controllers/users-controller');
 const factorsController = require('../controllers/factors-controller');
 const recordsController = require('../controllers/records-controller');
 const upload_fileController = require('../controllers/upload_file-controller');
+const predictionController = require('../controllers/predictions-controller');
 const {register } = require('../controllers/auth');
 const upload = require("../middleware/upload");
 
@@ -73,5 +74,8 @@ router.patch('/record/:rid', recordsController.updateRecord);
 
 router.post("/upload_file", upload.single("file"), upload_fileController.saveImage);
 router.get('/fetchImage/:file(*)', upload_fileController.getImage);
+
+router.route("/prediction").post(predictionController.createPrediction);
+router.get('/prediction/', predictionController.getPredictions);
 
 module.exports = router;
