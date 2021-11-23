@@ -263,7 +263,7 @@ const getNumRecordsFromBioXPlace = async (req, res, next) => {
                 let factor = factors[index2].name;
                 let value = records[index].values[0][factor];
                 if(value !== ""){
-                    data[factor].push(value);
+                    data[factor].push(parseFloat(value));
                 }
             }
         }
