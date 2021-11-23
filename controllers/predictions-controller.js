@@ -21,7 +21,7 @@ const createPrediction = async (req, res, next) => {
 
     let bioprocess;
     try {
-        bioprocess = await Bioprocess.findById(bioprocessID);
+        bioprocess = await Bioprocess.findById(bioprocessID, {image: 0});
     } catch (err) {
         const error = new HttpError(
             "Could not fetch bioprocess, please try again.",
@@ -40,7 +40,7 @@ const createPrediction = async (req, res, next) => {
 
     let place;
     try {
-        place = await Place.findById(placeID);
+        place = await Place.findById(placeID, {image: 0});
     } catch (err) {
         const error = new HttpError(
             "Could not fetch place, please try again.",
@@ -52,6 +52,23 @@ const createPrediction = async (req, res, next) => {
     if (!place) {
         const error = new HttpError("Could not find place for provided id.", 404);
         return next(error);
+    }
+
+    let user;
+    try {
+      user = await User.findById(req.userData.userId, {image: 0});
+     
+    } catch (err) {
+      const error = new HttpError(
+        'Creating Place failed, please try again.',
+        500
+      );
+      return next(error);
+    }
+ 
+    if (!user) {
+      const error = new HttpError('Could not find user for provided id.', 404);
+      return next(error);
     }
 
     try {
